@@ -48,5 +48,5 @@ if st.button("🎯 Tahmin Et"):
         confidence = prediction[0][predicted_class] * 100
         st.subheader(f"🔢 Tahmin: {predicted_class} (%{confidence:.1f} emin)")
 
-        st.subheader("📊 Model Doğruluk Analizi (Confusion Matrix)")
-        st.image("confusion_matrix.png", caption="Eğitim sonrası doğruluk analizi", use_container_width=True)
+    st.subheader("📊 Model Doğruluk Analizi (Confusion Matrix)")
+    st.image("confusion_matrix.png", caption="Eğitim sonrası doğruluk analizi", use_container_width=True)

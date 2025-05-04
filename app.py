@@ -1,23 +1,15 @@
-# Güncel app.py dosyasına dinamik model yüklemeyi ekle
-path = "/mnt/data/app.py"
+# Dinamik model yükleme dışında her şey sabit, sadece hatalı kodlar temizlenmiş app.py oluşturuluyor
+with open("/mnt/data/app.py", "r", encoding="utf-8") as f:
+    raw_code = f.read()
 
-# Dosyayı oku
-with open(path, "r", encoding="utf-8") as f:
-    code = f.read()
+# Gereksiz "with open(...)" parçalarını temizle
+cleaned_code = "\n".join([
+    line for line in raw_code.splitlines()
+    if not line.strip().startswith("path =") and "open(" not in line
+])
 
-# Sabit model yükleme satırını bul ve değiştir
-old_line = 'model = tf.keras.models.load_model("mnist_model.h5")'
-new_lines = '''
-model_path = "updated_model.h5" if os.path.exists("updated_model.h5") else "mnist_model.h5"
-model = tf.keras.models.load_model(model_path)
-st.markdown(f"📦 Kullanılan model: `{model_path}`")
-'''
+# Dosyayı tekrar kaydet
+with open("/mnt/data/app.py", "w", encoding="utf-8") as f:
+    f.write(cleaned_code)
 
-if old_line in code:
-    code = code.replace(old_line, new_lines)
-
-# Dosyayı güncelle
-with open(path, "w", encoding="utf-8") as f:
-    f.write(code)
-
-path
+"/mnt/data/app.py"

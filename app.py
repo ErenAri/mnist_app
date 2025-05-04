@@ -6,9 +6,8 @@ import tensorflow as tf
 import cv2
 
 st.set_page_config(page_title="MNIST Tahmin Uygulaması")
-st.title("🖌️ El Yazısı Rakam Tanıma")
-st.subheader("📊 Model Doğruluk Analizi (Confusion Matrix)")
-st.image("confusion_matrix.png", caption="Eğitim sonrası doğruluk analizi", use_container_width=True)
+st.title("El Yazısı Rakam Tanıma")
+
 st.write("Bir rakam çizin (0-9) ve modelin ne tahmin ettiğini görün.")
 
 # Modeli yükle
@@ -23,10 +22,10 @@ if st.button("🗑️ Tuvali Temizle"):
     st.rerun()
 
 canvas_result = st_canvas(
-    fill_color="#000000",
+    fill_color="#000000",             # dolgu rengi (boşluklar)
     stroke_width=12,
-    stroke_color="#FFFFFF",
-    background_color="#f0f0f0",
+    stroke_color="#FFFFFF",           # çizim rengi (kalem: beyaz)
+    background_color="#000000",       # tuval arka planı: siyah
     width=300,
     height=300,
     drawing_mode="freedraw",
@@ -34,6 +33,7 @@ canvas_result = st_canvas(
     update_streamlit=True,
     initial_drawing=None
 )
+
 
 if st.button("🎯 Tahmin Et"):
     if canvas_result.image_data is not None:
@@ -45,4 +45,8 @@ if st.button("🎯 Tahmin Et"):
         img_input = img_normalized.reshape(1, 28, 28, 1)
         prediction = model.predict(img_input)
         predicted_class = np.argmax(prediction)
-        st.subheader(f"🔢 Tahmin: {predicted_class}")
+        confidence = prediction[0][predicted_class] * 100
+        st.subheader(f"🔢 Tahmin: {predicted_class} (%{confidence:.1f} emin)")
+
+        st.subheader("📊 Model Doğruluk Analizi (Confusion Matrix)")
+        st.image("confusion_matrix.png", caption="Eğitim sonrası doğruluk analizi", use_container_width=True)
